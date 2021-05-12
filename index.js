@@ -77,6 +77,20 @@ async function main() {
             console.log(e)
         }
     })
+
+    // Delete expenses
+    app.delete("/expenses/:id", async(req,res)=>{
+        try{
+            await db.collection("expenses").deleteOne({
+                _id: ObjectId(req.params.id)
+            })
+            res.status(200);
+            res.send("Expense deleted.")
+        } catch (e) {
+            res.status(500);
+            res.send("Unable to delete expenses.")
+        }
+    })
 }
 
 main()
