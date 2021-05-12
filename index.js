@@ -31,7 +31,7 @@ async function main() {
     app.post("/expenses", async (req, res) => {
         try {
             let results = await db.collection("expenses").find({
-                user_id: req.body.user_id
+                user_id: ObjectId(req.body.user_id)
             }).toArray()
             res.send(results)
         } catch (e) {
@@ -45,7 +45,7 @@ async function main() {
     app.post("/expenses/add", async (req, res) => {
         try {
             await db.collection("expenses").insertOne({
-                user_id: req.body.user_id,
+                user_id: ObjectId(req.body.user_id),
                 amount: req.body.amount,
                 date: req.body.date,
                 category: req.body.category,
