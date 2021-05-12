@@ -1,0 +1,25 @@
+{
+  "name": "exp-tracker",
+  "version": "1.0.0",
+  "description": "## Context This project aims to create an interactive web application using React and creating my own RESTful API using Mongo and Express.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yongsannnn/exp-tracker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yongsannnn/exp-tracker/issues"
+  },
+  "homepage": "https://github.com/yongsannnn/exp-tracker#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^9.0.2",
+    "express": "^4.17.1",
+    "mongodb": "^3.6.6"
+  }
+}
