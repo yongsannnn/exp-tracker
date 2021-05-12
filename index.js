@@ -10,7 +10,6 @@ app.use(express.json());
 app.use(cors());
 // Setup end
 
-
 async function main() {
     let db = await MongoUtil.connect(mongoUrl, "expense_tracker")
     console.log("Database connected")
@@ -51,6 +50,31 @@ async function main() {
             console.log(e)
             res.status(500)
             res.send("Unable to add expenses.")
+        }
+    })
+
+    // Put - Update expenses
+    app.put("/expenses/edit", async (req, res) => {
+        try {
+            let results = await db.collection("expenses").updateOne(
+                {
+                    _id: ObjectId(req.body.expense_id)
+                },
+                {
+                    "$set": {
+                        user_id: req.body.user_id,
+                        amount: req.body.amount,
+                        date: req.body.date,
+                        category: req.body.category,
+                        memo: req.body.memo
+                    }
+                })
+            res.status(200)
+            res.send("Expense updated.")
+        } catch (e) {
+            res.status(500)
+            res.send("Unable to edit expenses.")
+            console.log(e)
         }
     })
 }
