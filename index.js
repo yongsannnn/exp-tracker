@@ -86,8 +86,8 @@ async function main() {
     })
 
     // Delete expenses
-    app.delete("/expenses/:id", async(req,res)=>{
-        try{
+    app.delete("/expenses/:id", async (req, res) => {
+        try {
             await db.collection("expenses").deleteOne({
                 _id: ObjectId(req.params.id)
             })
@@ -101,15 +101,14 @@ async function main() {
 
     // USERS 
     // Create account
-    app.post("/account/create", async(req,res)=>{
+    app.post("/account/create", async (req, res) => {
         // Check if email has been used
         // If used, return "Email in used" 
         // else, add account to db.
-        let checkEmail = await db.collection("accounts").find({
-            email: {$in: [req.body.email]}
-        }).toArray();
-        console.log(checkEmail[0])
-        if (!checkEmail[0]){
+        let checkEmail = await db.collection("accounts").findOne({
+            email: { $in: [req.body.email] }
+        })
+        if (!checkEmail) {
             try {
                 await db.collection("accounts").insertOne({
                     email: req.body.email,
@@ -128,6 +127,20 @@ async function main() {
     })
 
     // Login account
+    app.post("/account/login", async (req, res) => {
+        // Check if email is in db
+        // If email and password is same grant access 
+        // If email doesn't exist OR password not same, return "Invalid credentials"
+        let checkEmail = await db.collection("accounts").findOne({
+            email: { $in: [req.body.email] }
+        })
+        if (checkEmail.email && checkEmail.password == getHashedPassword(req.body.password)){
+            // Add in JWT when possible
+            res.send(checkEmail)
+        } else {
+            res.send("Invalid credentials.")
+        }
+    })
 }
 
 main()
