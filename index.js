@@ -9,6 +9,13 @@ let app = express();
 app.use(express.json());
 app.use(cors());
 // Setup end
+const crypto = require("crypto")
+
+const getHashedPassword = (password) => {
+    const sha256 = crypto.createHash("sha256")
+    const hash = sha256.update(password).digest("base64")
+    return hash
+}
 
 async function main() {
     let db = await MongoUtil.connect(mongoUrl, "expense_tracker")
@@ -91,6 +98,36 @@ async function main() {
             res.send("Unable to delete expenses.")
         }
     })
+
+    // USERS 
+    // Create account
+    app.post("/account/create", async(req,res)=>{
+        // Check if email has been used
+        // If used, return "Email in used" 
+        // else, add account to db.
+        let checkEmail = await db.collection("accounts").find({
+            email: {$in: [req.body.email]}
+        }).toArray();
+        console.log(checkEmail[0])
+        if (!checkEmail[0]){
+            try {
+                await db.collection("accounts").insertOne({
+                    email: req.body.email,
+                    password: getHashedPassword(req.body.password)
+                })
+                res.status(200)
+                res.send("Account created.")
+            } catch (e) {
+                console.log(e)
+                res.status(500)
+                res.send("Unable to create account.")
+            }
+        } else {
+            res.send("Email in used.")
+        }
+    })
+
+    // Login account
 }
 
 main()
