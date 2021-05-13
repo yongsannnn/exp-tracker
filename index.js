@@ -134,11 +134,15 @@ async function main() {
         let checkEmail = await db.collection("accounts").findOne({
             email: { $in: [req.body.email] }
         })
-        if (checkEmail.email && checkEmail.password == getHashedPassword(req.body.password)){
-            // Add in JWT when possible
-            res.send(checkEmail)
-        } else {
-            res.send("Invalid credentials.")
+        try{
+            if (checkEmail.email && checkEmail.password == getHashedPassword(req.body.password)){
+                // Add in JWT when possible
+                res.send(checkEmail)
+            } else {
+                res.send("Invalid credentials.")
+            }
+        } catch (e){
+            res.send("Unable to login")
         }
     })
 }
