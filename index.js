@@ -82,7 +82,7 @@ async function main() {
                 },
                 {
                     "$set": {
-                        user_id: req.body.user_id,
+                        user_id: ObjectId(req.body.user_id),
                         amount: req.body.amount,
                         date: req.body.date,
                         category: req.body.category,
