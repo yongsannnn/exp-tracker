@@ -27,6 +27,19 @@ async function main() {
         res.send(results)
     })
 
+    // Get expenses based on the expense id
+    app.post("/individual/expenses", async (req,res)=>{
+        try {
+            let results = await db.collection("expenses").findOne({
+                _id: { $in: [ObjectId(req.body.id)] }
+            })
+            res.send(results)
+        } catch (e){
+            res.status(500)
+            res.send("Unable to get data.")
+        }
+    })
+
     // Get all expenses based on the user id
     app.post("/expenses", async (req, res) => {
         try {
