@@ -22,7 +22,7 @@ async function main() {
     console.log("Database connected")
 
     // Get all document
-    app.get("/", async (req, res) => {
+    app.get("/all", async (req, res) => {
         let results = await db.collection("expenses").find().toArray();
         res.send(results)
     })
