@@ -40,6 +40,28 @@ async function main() {
         }
     })
 
+    // Get expenses based on the expense id & search category
+    app.post("/individual/expenses/search", async (req,res)=>{
+        let criteria = {}
+        if (req.body.user_id){
+             criteria["user_id"] = {
+                     $in : [ObjectId(req.body.user_id)]
+            }
+        }
+        if (req.body.search){
+            criteria["category"] = {
+                $in : [req.body.search]
+            }
+        }
+        try {
+            let results = await db.collection("expenses").find(criteria).toArray()
+            res.send(results)
+        } catch (e){
+            res.status(500)
+            res.send("Unable to get data.")
+        }
+    })
+
     // Get all expenses based on the user id
     app.post("/expenses", async (req, res) => {
         try {
